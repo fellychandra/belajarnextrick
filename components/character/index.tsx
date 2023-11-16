@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
+import { DataCharacterDetails } from "@/data/characters";
 
 const style = {
   position: "absolute" as "absolute",
@@ -18,12 +19,26 @@ const style = {
   p: 4,
 };
 
-export default function DetailCharacter({ character }: any) {
+export default function DetailCharacter({ id }: any) {
+  const { data } = DataCharacterDetails(id);
+
   const [open, setOpen] = useState(false);
+  const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState<any[]>([]);
+  const [locationNames, setLocationNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    const storedLocations = localStorage.getItem("locations");
+    const storedLocationNames = localStorage.getItem("locationsName");
+
+    if (storedLocations && storedLocationNames) {
+      setLocations(JSON.parse(storedLocations));
+      setLocationNames(JSON.parse(storedLocationNames));
+    }
+  }, []);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const [location, setLocation] = useState("");
 
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
@@ -31,42 +46,66 @@ export default function DetailCharacter({ character }: any) {
 
   const handleModalSave = () => {
     const lokasi = {
-      id: Number(character.id),
-      name: character.name,
-      status: character.status,
-      species: character.species,
-      type: character.type,
-      gender: character.gender,
-      image: character.image,
+      id: Number(data?.data.id),
+      name: data?.data.name,
+      status: data?.data.status,
+      species: data?.data.species,
+      type: data?.data.type,
+      gender: data?.data.gender,
+      image: data?.data.image,
       location: location,
     };
 
-    localStorage.setItem("location", JSON.stringify({ data: [lokasi] }));
+    const existingLocation = locations.find(
+      (loc) => loc.id === lokasi.id && loc.location === location
+    );
+
+    if (existingLocation) {
+      alert("This character already exists in this location");
+
+      return;
+    }
+
+    localStorage.setItem("locations", JSON.stringify([...locations, lokasi]));
+
+    const nameExists = locationNames.includes(location);
+
+    if (!nameExists) {
+      localStorage.setItem(
+        "locationsName",
+        JSON.stringify([...locationNames, location])
+      );
+      setLocationNames([...locationNames, location]);
+    }
+    handleClose();
   };
 
   return (
     <>
-      <div className="bg-white text-black border-2 rounded-md h-auto w-auto">
-        <Image
-          src={character.image}
-          alt={character.name}
-          width={350}
-          height={300}
-          className="object-cover w-full h-96"
-        />
+      <div className="bg-white text-black border-2 rounded-md p-2">
+        {data?.data.image && (
+          <Image
+            src={data?.data.image}
+            width={350}
+            height={300}
+            alt={data?.data.name}
+            className="object-cover w-full h-96"
+            priority
+          />
+        )}
         <div className="grid-rows-2 p-2">
           <strong>Name : </strong>
-          {character.name}
+          {data?.data.name}
           <br />
-          <strong>Status:</strong> {character.status}
+          <strong>Status:</strong> {data?.data.status}
           <br />
-          <strong>Species:</strong> {character.species}
+          <strong>Species:</strong> {data?.data.species}
           <br />
-          <strong>Status:</strong> {character.status}
+          <strong>Status:</strong> {data?.data.status}
           <br />
-          <strong>Type:</strong> {character.type}
+          <strong>Type:</strong> {data?.data.type}
           <br />
-          <strong>Gender:</strong> {character.gender}
+          <strong>Gender:</strong> {data?.data.gender}
           <br />
           <Button onClick={handleOpen} variant="outlined">
             Open modal

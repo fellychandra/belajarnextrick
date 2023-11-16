@@ -7,7 +7,7 @@ function Header() {
         <div>Rick and Morty</div>
         <div className="flex md:gap-9 gap-2 items-center justify-center">
           <Link href={'/characters'}>Characters</Link>
-          <Link href={'/locations'}>Locations</Link>
+          <Link href={'/location'}>Locations</Link>
         </div>
       </div>
     </div>

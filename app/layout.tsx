@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import React, { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import LoadingComponent from "@/components/loading";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import ReactQueryWrapper from "@/components/reactquery";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,11 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Suspense fallback={<LoadingComponent />}>
-          <Header />
-          {children}
-          <Footer/>
-        </Suspense>
+        <ReactQueryWrapper>{children}</ReactQueryWrapper>
       </body>
     </html>
   );

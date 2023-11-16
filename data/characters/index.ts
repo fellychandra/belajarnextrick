@@ -1,21 +1,16 @@
-import axios from "axios";
+import { api } from "@/lib/axios";
+import { useQuery } from "@tanstack/react-query";
 
-export const DataCharacters = async () => {
-  try {
-    const { data } = await axios.get(`${process.env.LINK_API}/character`);
-    return data;
-
-  } catch (error) {
-    console.log(error);
-  }
+export const DataCharacters = ( page: number ) => {
+  return useQuery({
+    queryKey: ["character", page],
+    queryFn: async () => await api.get(`/character?page=${page}`),
+  });
 };
 
-export const DataCharacterDetails = async (id: any) => {
-  try {
-    const { data } = await axios.get(`${process.env.LINK_API}/character/${id}`);
-    return data;
-
-  } catch (error) {
-    console.log(error);
-  }
+export const DataCharacterDetails = (id: number) => {
+  return useQuery({
+    queryKey: ["detailCharacter", id],
+    queryFn: async () => await api.get(`character/${id}`)
+  });
 };

@@ -9,7 +9,7 @@ export default function CardCharacter({ character }: any) {
           width={350}
           height={300}
           className="object-cover"
-          alt={character.nama}
+          alt=""
         />
         <div className="grid-rows-2 p-2">
           <strong>Name : </strong>
