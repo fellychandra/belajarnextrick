@@ -10,12 +10,10 @@ type Props = {
 const DetailCharacterPage = ({ params }: Props) => {
   return (
     <>
-      <div className="container flex items-center justify-center h-screen">
-        <div className="flex flex-col items-center content-center object-center">
-          <h1 className="mt-5 text-center mb-6 text-5xl">Character Details</h1>
-          <div>
-            <DetailCharacter id={params.id} />
-          </div>
+      <h1 className="mt-5 text-center mb-5 text-5xl">Character Details</h1>
+      <div className="container flex items-center justify-center ">
+        <div>
+          <DetailCharacter id={params.id} />
         </div>
       </div>
     </>
